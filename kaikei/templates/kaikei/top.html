@@ -1,0 +1,38 @@
+{% extends 'kaikei/base.html' %}
+{% load static %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="pt-5 container">
+            <div class="row">
+                <div class="col-8">
+                    <div class="text-center">
+                        <img src="{% static 'kaikei/test-img.jpg' %}">
+                    </div>
+                    <div class="pt-5 container">
+                        <div class="col text-center">
+                            <button class="btn btn-outline-primary w-25" type="submit" onclick="location.href={% url 'kaikei:index' %}">受付</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">会計待ち</h4>
+                            {% for customer in waitingcustomer_list %}
+                                <a href="{% url 'kaikei:accounting' customer.customer_id %}"><p class="text-primary card-text">{{ customer.name }}</p></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>please login</p>
+        <a href="{% url 'kaikei:login' %}">login</a>
+    {% endif %}
+{% endblock content %}

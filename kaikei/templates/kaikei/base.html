@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- bootstrap4 -->
+        {% load bootstrap4 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery='full' %}
+        <!-- bootstrap4 -->
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href="{% static 'kaikei/style.css' %}" rel="stylesheet">
+
+        <script type="text/javascript">
+            $(function() {
+                var topBtn = $('#page-top');
+                topBtn.hide();
+                //スクロールが500に達したらボタン表示
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 500) {
+                        topBtn.fadeIn();
+                    } else {
+                        topBtn.fadeOut();
+                    }
+                });
+                //スクロールしてトップ
+                topBtn.click(function () {
+                    $('body,html').animate({
+                        scrollTop: 0
+                    }, 500);
+                    return false;
+                });
+            });
+        </script>
+
+        <title>{% block title %}会計アプリ{% endblock %}</title>
+    </head>
+    <body>
+
+        <!-- ナビゲーションバーの設定 -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'kaikei:top' %}">会計アプリ</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'kaikei:customer_create' %}">新規登録</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://127.0.0.1:8000/admin/" class="logout">管理ページ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'kaikei:logout' %}">ログアウト</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'kaikei:login' %}" class="login">ログイン</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+         <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <p id="page-top"><a href="#">PAGE TOP</a></p>
+            <footer class="py-4 bg-dark">
+                <div class="container text-center">
+                    <p class="text-light"><small>Copyright &copy;2021 Kaikei, All Rights Reserved.</small></p>
+                </div>
+            </footer>
+    </body>
+</html>
